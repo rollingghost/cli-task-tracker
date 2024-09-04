@@ -12,7 +12,7 @@ rang back to my new knowledge. So lets put it into test.
 
 ## Release
 
-[CLI Task Tracker]()
+[CLI Task Tracker](https://github.com/rollingghost/cli-task-tracker/releases/download/Productivity/cli-task-tracker)
 
 ## Requirements
 
