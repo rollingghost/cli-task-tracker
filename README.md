@@ -16,12 +16,21 @@ rang back to my new knowledge. So lets put it into test.
 
 ## Release
 
-The release is the easiest way to run this program.
+The release is the easiest way to run this program. No cloning and compiling is required.
 
-- Download the binary from [CLI Task Tracker](https://github.com/rollingghost/cli-task-tracker/releases/download/Productivity/cli-task-tracker)
-- On linux open the terminal
+Download the binary from [CLI Task Tracker](https://github.com/rollingghost/cli-task-tracker/releases/download/Productivity/cli-task-tracker)
+
+On linux:
+
+- open the terminal
 - Navigate to the directory where the binary is located
-- Use the command `./cli-task-tracker` or `./cli-task-tracker --help` for help
+- Use the command `./cli-task-tracker` to run the program
+
+On windows you can just double-click the binary to run it or:
+
+- Open the command prompt
+- Navigate to the directory where the binary is located
+- Use the command `.\cli-task-tracker` to run the program
 
 ## Usage
 
@@ -48,12 +57,13 @@ After installing rust
 - `list --status staged` lists tasks that are marked as in progress
 - `list --status done` lists tasks that are marked as done
 - `list --status todo` lists task that are marked as todo
+- `help` lists all the commands
 
 ## Features
 
 - [x] Add task
 - [x] Delete task
-- [x] Update task ()
+- [x] Update task
 - [x] List tasks by status
 
 ## Contributions
