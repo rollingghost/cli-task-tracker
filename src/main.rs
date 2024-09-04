@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 use cli_task_tracker::{
-    list_tasks, load_json_tasks, pretty_table, save, search_task, show_commands, stage_task,
-    AllTasks, Task, TaskStatus, TaskStruct,
+    list_tasks, load_json_tasks, pretty_table, save, search_task, show_commands, AllTasks, Task,
+    TaskStatus, TaskStruct,
 };
 use std::io::{stdin, stdout, Write};
 use std::time::SystemTime;
@@ -99,7 +99,7 @@ fn main() {
                             updated_at: SystemTime::now(),
                             status: TaskStatus::ToDo,
                         }
-                        .new(&mut all_tasks);
+                        .add(&mut all_tasks);
                     }
                     Commands::List { status } => match status.as_str() {
                         "all" => pretty_table(&list_tasks(TaskStatus::All, &all_tasks)),
@@ -114,10 +114,25 @@ fn main() {
                             println!("\t`todo`: for upcoming tasks")
                         }
                     },
-                    Commands::Stage { id } => {
-                        stage_task(id, &all_tasks).unwrap();
-                    }
-                    Commands::Done { id } => println!("Marking `{id}` as done."),
+                    Commands::Stage { id } => match search_task(id, &all_tasks) {
+                        Some((space_index, task)) => match task {
+                            Some(task) => {
+                                task.stage(space_index.1, &mut all_tasks, space_index.0);
+                            }
+                            _ => eprintln!("No task was found"),
+                        },
+
+                        _ => eprintln!("Snap it!"),
+                    },
+                    Commands::Done { id } => match search_task(id, &all_tasks) {
+                        Some((space_index, task)) => match task {
+                            Some(task) => {
+                                task.done(space_index.1, &mut all_tasks, space_index.0);
+                            }
+                            _ => eprintln!("No task was found"),
+                        },
+                        _ => eprintln!("Snap it!"),
+                    },
                     Commands::Update { id, description } => match search_task(id, &all_tasks) {
                         Some((space_index, task)) => match task {
                             Some(task) => {

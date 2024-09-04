@@ -28,16 +28,10 @@ pub enum IfTaskFound {
 
 pub trait Task {
     fn delete(self, index: usize, space: Space, all_tasks: &mut AllTasks);
-    fn update(
-        self,
-        new_task: TaskStruct,
-        all_tasks: &mut AllTasks,
-        space: Space,
-        index: usize,
-    ) -> TaskStruct;
-    fn new(self, all_tasks: &mut AllTasks);
-    fn stage(self, index: usize);
-    fn done(self, index: usize);
+    fn update(self, new_task: TaskStruct, all_tasks: &mut AllTasks, space: Space, index: usize);
+    fn add(self, all_tasks: &mut AllTasks) -> Self;
+    fn stage(self, index: usize, all_tasks: &mut AllTasks, space: Space);
+    fn done(self, index: usize, all_tasks: &mut AllTasks, space: Space);
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone, Eq, Hash)]
@@ -76,52 +70,52 @@ impl Task for TaskStruct {
             Space::SavedTasks => &mut all_tasks.saved_tasks,
             Space::TmpTasks => &mut all_tasks.tmp_tasks,
         };
-        println!("Len before removing: {}", task_space.len());
-        println!("Deleting task with id: {}", self.id);
+        //println!("Len before removing: {}", task_space.len());
+        //println!("Deleting task with id: {}", self.id);
         task_space.remove(index);
-        println!("Len after {}", task_space.len())
+        //println!("Len after {}", task_space.len());
+
+        save(all_tasks).unwrap();
     }
 
-    fn update(
-        self,
-        new_task: TaskStruct,
-        all_tasks: &mut AllTasks,
-        space: Space,
-        index: usize,
-    ) -> TaskStruct {
-        let task_space = match space {
-            Space::SavedTasks => &mut all_tasks.saved_tasks,
-            Space::TmpTasks => &mut all_tasks.saved_tasks,
-        };
+    fn update(self, new_task: TaskStruct, all_tasks: &mut AllTasks, space: Space, index: usize) {
+        match space {
+            Space::SavedTasks => all_tasks.saved_tasks[index] = new_task,
+            Space::TmpTasks => all_tasks.tmp_tasks[index] = new_task,
+        }
 
-        println!("{}", index);
-        println!("Removing: {:?}", task_space[index]);
-        task_space.remove(index);
-        task_space.push(new_task.clone());
-
-        new_task
+        save(all_tasks).unwrap();
     }
 
-    fn new(self, all_tasks: &mut AllTasks) {
-        let tmp_tasks = &mut all_tasks.tmp_tasks;
-        println!("Before adding: {}", tmp_tasks.len());
-        println!("Creating: {:?}", self);
-        tmp_tasks.push(self.clone());
-        println!("After pushing: {}", tmp_tasks.len());
-        println!("{:?}", tmp_tasks);
+    fn add(self, all_tasks: &mut AllTasks) -> Self {
+        //println!("Before adding: {}", all_tasks.tmp_tasks.len());
+        //println!("Creating: {:?}", self);
+        all_tasks.tmp_tasks.push(self.clone());
+        //println!("After pushing: {}", all_tasks.tmp_tasks.len());
+        //println!("{:?}", all_tasks.tmp_tasks.len());
+
+        self
     }
 
-    fn stage(self, index: usize) {
-        let mut new_array = load_json_tasks().unwrap();
-        let mut stage_task = new_array.remove(index);
-        stage_task.status = TaskStatus::InProgress;
-        stage_task.updated_at = SystemTime::now();
+    fn stage(self, index: usize, all_tasks: &mut AllTasks, space: Space) {
+        match space {
+            Space::SavedTasks => all_tasks.saved_tasks[index].status = TaskStatus::InProgress,
+            Space::TmpTasks => all_tasks.tmp_tasks[index].status = TaskStatus::InProgress,
+        }
 
-        new_array.push(stage_task);
+        save(all_tasks).unwrap();
     }
 
-    fn done(self, _index: usize) {
-        todo!()
+    // Marking task as done
+    fn done(self, index: usize, all_tasks: &mut AllTasks, space: Space) {
+        match space {
+            Space::SavedTasks => {
+                all_tasks.saved_tasks[index].status = TaskStatus::Done;
+            }
+            Space::TmpTasks => all_tasks.tmp_tasks[index].status = TaskStatus::Done,
+        }
+
+        save(all_tasks).unwrap();
     }
 }
 
@@ -297,34 +291,6 @@ fn break_string(string: &str) -> String {
 fn system_time_to_string(system_time: SystemTime) -> String {
     let datetime: DateTime<Utc> = system_time.into();
     datetime.format("%Y-%m-%d \n %H:%M:%S").to_string()
-}
-
-// Stage task, move a task from todo to in progress
-pub fn stage_task(
-    id: String,
-    all_tasks: &AllTasks,
-) -> Result<Vec<TaskStruct>, Box<dyn std::error::Error>> {
-    // Try to find the task and updated it
-    let mut task_to_modify = Vec::new();
-    let _modified_task: Vec<TaskStruct> = Vec::new();
-    let mut joined_vectors = all_tasks.saved_tasks.clone();
-    joined_vectors.extend(all_tasks.tmp_tasks.iter().cloned());
-
-    for task in joined_vectors {
-        if task.id == id {
-            task_to_modify.push(task);
-            pretty_table(&task_to_modify);
-            break;
-        }
-    }
-
-    if !task_to_modify.is_empty() {
-        task_to_modify[0].status = TaskStatus::InProgress;
-    }
-
-    pretty_table(&task_to_modify);
-
-    Ok(task_to_modify)
 }
 
 // Search a task
