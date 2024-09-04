@@ -17,8 +17,9 @@ installed correctly
 
 - After cloning navigate to the directory and run
   - `cargo run <options>` or use `cargo run --help` for help
-- Or if you are working with linux, move the binary in `target/release`
-  directory to `/usr/bin` to use the task tracker
+- Or download the binary and run directly on the terminal
+- If you are using linux you can move the binary to `/usr/bin`
+  for a global effect
 
 ## Supported commands
 
