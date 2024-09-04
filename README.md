@@ -44,7 +44,7 @@ After installing rust
 - `update <id description>` updates a task
 - `done <id>` marks a task as done
 - `delete <id>` deletes a task
-- `list --status all` lists all tasks
+- `list --status all` lists all tasks default is `all`
 - `list --status staged` lists tasks that are marked as in progress
 - `list --status done` lists tasks that are marked as done
 - `list --status todo` lists task that are marked as todo
