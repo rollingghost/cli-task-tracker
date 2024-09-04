@@ -9,37 +9,29 @@ rang back to my new knowledge. So lets pu it into test
 ## Requirements
 
 - [Rust](https://rustup.rs) `1.80.1`
-- [SurrealDB](https://surrealdb.com/docs/surrealdb/installation) `1.5.4`
 
 ## Usage
 
 After installing rust and surrealdb and confirmed that they
 installed correctly
 
-- In the terminal start the surreal instance by running:
-    - On linux
-      - `surreal start memory -A --user root --pass root`
-    - On windows
-      - `surreal.exe start memory -A --user root --pass root`
-
-- Clone this repository
-  - `https://github.com/rollingghost/cli-task-tracker.git`
-
 - After cloning navigate to the directory and run
   - `cargo run <options>` or use `cargo run --help` for help
+- Or if you are working with linux, move the binary in `target/release`
+  directory to `/usr/bin` to use the task tracker
 
 ## Supported commands
 
-- `add <task>` creates new task and by default it is marked as todo
-- `stage <task>` puts the task into progress
-- `update <task>` updates a task
-- `delete <task>` deletes a task
-- `list all` lists all tasks
-- `list staged` lists tasks that are marked as in progress
-- `list done` lists tasks that are marked as done
-- `list todo` lists task that are marked as todo
-
+- `add <task description>` creates new task and by default it is marked as todo
+- `stage <task id>` puts the task into progress
+- `update <task id description>` updates a task
+- `done <task id>` marks a task as done
+- `delete <task id>` deletes a task
+- `list --status all` lists all tasks
+- `list --status staged` lists tasks that are marked as in progress
+- `list --status done` lists tasks that are marked as done
+- `list --status todo` lists task that are marked as todo
 
 ## Contributions
 
-Feel free to create an issue or submit a pull request
+Feel free to contribute to this project by forking and creating a pull request
