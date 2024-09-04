@@ -27,8 +27,7 @@ The release is the easiest way to run this program.
 
 ![Using Task CLI Example Command](./action.png)
 
-After installing rust and confirmed that they
-installed correctly
+After installing rust
 
 - Ensure rust is working properly by running
   - `rustc --version`
