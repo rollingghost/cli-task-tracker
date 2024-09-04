@@ -99,8 +99,14 @@ impl Task for TaskStruct {
 
     fn stage(self, index: usize, all_tasks: &mut AllTasks, space: Space) {
         match space {
-            Space::SavedTasks => all_tasks.saved_tasks[index].status = TaskStatus::InProgress,
-            Space::TmpTasks => all_tasks.tmp_tasks[index].status = TaskStatus::InProgress,
+            Space::SavedTasks => {
+                all_tasks.saved_tasks[index].status = TaskStatus::InProgress;
+                all_tasks.saved_tasks[index].updated_at = SystemTime::now();
+            }
+            Space::TmpTasks => {
+                all_tasks.tmp_tasks[index].status = TaskStatus::InProgress;
+                all_tasks.tmp_tasks[index].updated_at = SystemTime::now();
+            }
         }
 
         save(all_tasks).unwrap();
@@ -111,8 +117,12 @@ impl Task for TaskStruct {
         match space {
             Space::SavedTasks => {
                 all_tasks.saved_tasks[index].status = TaskStatus::Done;
+                all_tasks.saved_tasks[index].updated_at = SystemTime::now();
             }
-            Space::TmpTasks => all_tasks.tmp_tasks[index].status = TaskStatus::Done,
+            Space::TmpTasks => {
+                all_tasks.tmp_tasks[index].status = TaskStatus::Done;
+                all_tasks.tmp_tasks[index].updated_at = SystemTime::now();
+            }
         }
 
         save(all_tasks).unwrap();

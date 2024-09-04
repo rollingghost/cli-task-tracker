@@ -6,6 +6,14 @@ Rust and SurrealDB recently and when I came across
 this project on [Roadmap Sh](https://roadmap.sh) it just
 rang back to my new knowledge. So lets put it into test.
 
+## Project
+
+[CLI Task Tracker](https://roadmap.sh/projects/task-tracker)
+
+## Release
+
+[CLI Task Tracker]()
+
 ## Requirements
 
 - [Rust](https://rustup.rs) `1.80.1`
