@@ -4,7 +4,7 @@ The following rust project utilizes two main important
 technologies, rust and surrealDB. I have been learning
 Rust and SurrealDB recently and when I came across
 this project on [Roadmap Sh](https://roadmap.sh) it just
-rang back to my new knowledge. So lets pu it into test
+rang back to my new knowledge. So lets put it into test.
 
 ## Requirements
 
@@ -12,9 +12,11 @@ rang back to my new knowledge. So lets pu it into test
 
 ## Usage
 
-After installing rust and surrealdb and confirmed that they
+After installing rust and confirmed that they
 installed correctly
 
+- Ensure rust is working properly by running
+  - `rustc --version`
 - After cloning navigate to the directory and run
   - `cargo run <options>` or use `cargo run --help` for help
 - Or download the binary and run directly on the terminal
