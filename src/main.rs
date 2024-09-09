@@ -1,61 +1,20 @@
-use clap::{Parser, Subcommand};
-use cli_task_tracker::{
+use clap::Parser;
+use cli_task_tracker::system::{cpu_usage, hello_cpu, sys_summary};
+use cli_task_tracker::task::{
     list_tasks, load_json_tasks, pretty_table, save, search_task, show_commands, AllTasks, Task,
     TaskStatus, TaskStruct,
 };
+use cli_task_tracker::tui_me::my_tui;
+use cli_task_tracker::{CliTracker, Commands};
+use crossterm::terminal::{Clear, ClearType};
 use std::io::{stdin, stdout, Write};
 use std::time::SystemTime;
 use uuid::Uuid;
 
-#[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-struct CliTracker {
-    #[command(subcommand)]
-    command: Commands,
-}
-
-#[derive(Subcommand)]
-enum Commands {
-    // Add a new task
-    Add {
-        // Task description
-        description: String,
-    },
-
-    // List tasks
-    List {
-        // List completed, in-progress, or to_do
-        #[arg(short, long, default_value = "all")]
-        status: String,
-    },
-    Done {
-        id: String,
-    },
-    Update {
-        id: String,
-
-        // Optional description update
-        description: String,
-    },
-    Delete {
-        id: String,
-    },
-    Stage {
-        id: String,
-    },
-    Search {
-        // Does searching and filtering
-        search_key: String,
-
-        // If a user specifies space to search
-        #[arg(short, long, default_value = "all")]
-        space: String,
-    },
-    Helps,
-    Save,
-    Exit,
-}
 fn main() {
+    // Clear terminal
+    print!("{}", Clear(ClearType::All));
+    let _ = my_tui();
     // Welcome message
     println!(
         r#"
@@ -163,6 +122,21 @@ fn main() {
                     Commands::Helps => show_commands(),
                     Commands::Save => save(&all_tasks).unwrap(),
                     Commands::Exit => break,
+
+                    Commands::Cpu { usage } => {
+                        println!("{}", hello_cpu());
+                        match usage {
+                            Some(string) => {
+                                if string == "load" {
+                                    cpu_usage()
+                                } else {
+                                    sys_summary()
+                                }
+                            }
+                            None => sys_summary(),
+                        }
+                    }
+                    Commands::Hello => println!("Hello fam!"),
                 }
             }
 

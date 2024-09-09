@@ -1,0 +1,4 @@
+#V2
+use namespace expenses;
+use database expenses
+select * from expenses
